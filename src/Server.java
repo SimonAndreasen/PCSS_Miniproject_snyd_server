@@ -1,85 +1,55 @@
-import java.io.*;
-import java.net.*;
-import java.util.Date;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
-public class Server extends Application {
-
-    //text area for displaying context
-    private TextArea ta = new TextArea();
-
-    //number of clients
-    private int clientNo = 0;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
-    @Override
-    public void start(Stage primaryStage) {
-        Scene scene = new Scene(new ScrollPane(ta), 450, 200);
-        primaryStage.setTitle("MultiThreadServer");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+public class Server {
+    private int port;
+    private ArrayList<Users> users;
+    private boolean gameWait;
+    private ServerSocket serverSocket;
 
-
-        new Thread(() -> {
-            try {
-                // Create a server socket
-                ServerSocket serverSocket = new ServerSocket(8000);
-                ta.appendText("MultiThread Server started at " + new Date() + '\n');
-
-
-                while (true) {
-                    Socket socket = serverSocket.accept();
-                    //increment clientNO
-                    clientNo++;
-
-                    Platform.runLater(() -> {
-                        // Display the client number
-                        ta.appendText("Starting thread for client" + clientNo + " at " + new Date() + '\n');
-                        //Find client's host name and IP
-                        InetAddress inetAddress = socket.getInetAddress();
-                        ta.appendText("Client" + clientNo + "'s host name is " + inetAddress.getHostName() + "\n");
-                        ta.appendText("Client" + clientNo + "'s IP address is " + inetAddress.getHostAddress() + "\n");
-                    });
-
-                    //create and start a new thread for the connection
-                    new Thread(new HandleAClient(socket)).start();
-                }
-            } catch (IOException ex) {
-                System.err.println(ex);
-            }
-        }).start();
+    public Server(int port) {
+        //Set port value to inputted augment, set gameWait to true and create an arrylist of the class "Users"
+        this.port = port;
+        gameWait = true;
+        users = new ArrayList<>();
     }
 
-    //class for handling nwe connection
-    class HandleAClient implements Runnable {
-        private Socket socket; // A connected socket
-
-         //Construct a thread
-        public HandleAClient(Socket socket) {
-            this.socket = socket;
+    public static void main(String[] args) {
+        //Create scanner object, scan the next inputted line and set that to the server port.
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter server port you want the game to be hosted at, default is; 8000. Ports underneath 1024 are reserved and thus unavailable");
+        int serverPort = scan.nextInt();
+        if (serverPort <= 1023){
+            System.out.println("Reserved port, input a new value");
+            System.out.println("Enter server port you want the game to be hosted at, default is; 8000. Ports underneath 1024 are reserved and thus unavailable");
+            serverPort = scan.nextInt();
         }
+        Server server = new Server(serverPort);
+        scan.close();
+        server.initiateServer();
+    }
 
-       //Run a thread
-        public void run() {
-            try {
-                //create data input and output streams
-                DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
-                DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
+    public void initiateServer() {
+        try {
+            serverSocket = new ServerSocket(port);
+            System.out.println("Server started");
 
-                // Continuously serve the client
-                while (true) {
-                    String message = inputFromClient.readUTF();
-                    System.out.println("Name gotten was " + message);
-                    ta.appendText(clientNo + " Name is " + message + '\n');
-                    }
-
-                    } catch (IOException exception) {
-                exception.printStackTrace();
+            while (gameWait) {
+                Socket socket = serverSocket.accept();
+                Users newUser = new Users(this, socket);
+                users.add(newUser);
+                newUser.start();
+                System.out.println(users.size()); //Prints current amount of users connected
             }
+
+        } catch (IOException e) {
+            System.out.println("Unable to start server IOException");
+            e.printStackTrace();
         }
     }
 }
