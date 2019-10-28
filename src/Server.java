@@ -9,13 +9,13 @@ import java.util.Scanner;
 public class Server {
     private int port;
     private ArrayList<Users> users;
-    private boolean gameWait;
+    private boolean lobby;
     private ServerSocket serverSocket;
 
     public Server(int port) {
         //Set port value to inputted augment, set gameWait to true and create an arrylist of the class "Users"
         this.port = port;
-        gameWait = true;
+        lobby = true;
         users = new ArrayList<>();
     }
 
@@ -39,7 +39,7 @@ public class Server {
             serverSocket = new ServerSocket(port);
             System.out.println("Server started");
 
-            while (gameWait) {
+            while (lobby) {
                 Socket socket = serverSocket.accept();
                 Users newUser = new Users(this, socket);
                 users.add(newUser);
