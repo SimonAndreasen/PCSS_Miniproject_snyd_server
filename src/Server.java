@@ -13,7 +13,7 @@ public class Server {
     private ServerSocket serverSocket;
 
     public Server(int port) {
-        //Set port value to inputted augment, set gameWait to true and create an arrylist of the class "Users"
+        //Set port value to inputted augment, set gameWait to true and create an arraylist of the class "Users"
         this.port = port;
         lobby = true;
         users = new ArrayList<>();
