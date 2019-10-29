@@ -52,4 +52,28 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<Users> getUsers() {
+        return users;
+    }
+
+    public void startGame(){
+        boolean start = true;
+        for (Users u: users) {
+            if(u.isReady() == true){
+                start = false;
+            }
+        }
+        if(start){
+            lobby=false;
+            for (Users u: users){
+                u.sendMessage("Game started");
+            }
+            new Thread(new Session(this)).start();
+        }
+    }
+
+    public void removeUser(Users u){
+        users.remove(u);
+    }
 }

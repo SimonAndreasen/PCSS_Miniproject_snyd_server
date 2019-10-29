@@ -10,25 +10,27 @@ public class Users extends Thread {
     private String userName;
     private DataOutputStream output;
     private DataInputStream input;
+    private boolean readyStatus;
     //number of clients
+
     private int clientNo = 0;
     ArrayList<Dice> myDice = new ArrayList<>();
+
 
     //text area for displaying context
     public Users(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        myDice.add(new Dice());
-        myDice.add(new Dice());
-        myDice.add(new Dice());
-        myDice.add(new Dice());
+        for (int i = 0; i<3;i++){
+            myDice.add(new Dice());
+        }
     }
 
-        public void shuffle(){
-            for (int i=0; i<myDice.size(); i++){
-                myDice.get(i).roll();
+    public void shuffle(){
+        for (int i=0; i<myDice.size(); i++){
+            myDice.get(i).roll();
 
-            }
+        }
 
     }
     public void printDice(){
@@ -45,9 +47,38 @@ public class Users extends Thread {
 
             userName = input.readUTF();
             System.out.println(userName + " joined the server");
-            // Display the client number
+
+            readyStatus = true;
+            while (readyStatus){
+                String clientMessage = input.readUTF();
+                if(clientMessage.equalsIgnoreCase("quit")){
+                    server.removeUser(this);
+                    socket.close();;
+                    readyStatus = false;
+                }
+                if (clientMessage.equalsIgnoreCase("ready")){
+                    readyStatus = false;
+                    server.startGame();
+                }
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    //getter for ready status -> info for Server
+    public boolean isReady(){
+        return readyStatus;
+    }
+
+    public void sendMessage(String message){
+        try{
+            output.writeUTF(message);
+            output.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
+
