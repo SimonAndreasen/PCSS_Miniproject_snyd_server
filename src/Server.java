@@ -83,6 +83,9 @@ public class Server {
             }
         }
     }
+
+    public ServerSocket getServerSocket(){
+        return serverSocket;
+    }
 }
 
-//get server socket ?

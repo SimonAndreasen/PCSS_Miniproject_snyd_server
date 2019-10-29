@@ -10,6 +10,7 @@ public class Users extends Thread {
     private String userName;
     private DataOutputStream output;
     private DataInputStream input;
+    private boolean lifted;
     private boolean readyStatus;
     //number of clients
 
@@ -69,13 +70,21 @@ public class Users extends Thread {
         }
     }
 
-    //getter for ready status -> info for Server
+    //getters and setter
     public boolean isReady() {
         return readyStatus;
     }
 
     public String getUserName(){
         return userName;
+    }
+
+    public boolean isLifted(){
+        return lifted;
+    }
+
+    public void setLifted(boolean lifted){
+        this.lifted=lifted;
     }
 
     //setter for estimate
@@ -107,8 +116,16 @@ public class Users extends Thread {
             e.printStackTrace();
         }
         return value;
-
     }
+
+    public void sendBoolean(boolean condition) {
+        try {
+            output.writeBoolean(condition);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
