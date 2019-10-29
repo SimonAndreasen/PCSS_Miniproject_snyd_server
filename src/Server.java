@@ -76,4 +76,13 @@ public class Server {
     public void removeUser(Users u){
         users.remove(u);
     }
+    public void sendToAll(String message, Users u){
+        for (Users usersThread: users){
+            if (usersThread!=u){
+                usersThread.sendMessage(message);
+            }
+        }
+    }
 }
+
+//get server socket ?

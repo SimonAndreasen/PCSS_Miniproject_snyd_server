@@ -21,21 +21,22 @@ public class Users extends Thread {
     public Users(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        for (int i = 0; i<3;i++){
+        for (int i = 0; i < 3; i++) {
             myDice.add(new Dice());
         }
     }
 
-    public void shuffle(){
-        for (int i=0; i<myDice.size(); i++){
+    public void shuffle() {
+        for (int i = 0; i < myDice.size(); i++) {
             myDice.get(i).roll();
 
         }
 
     }
-    public void printDice(){
+
+    public void printDice() {
         System.out.println("Your dice: ");
-        myDice.forEach( (i) -> System.out.print(i.value + ", "));
+        myDice.forEach((i) -> System.out.print(i.value + ", "));
         System.out.println(" ");
     }
 
@@ -49,14 +50,15 @@ public class Users extends Thread {
             System.out.println(userName + " joined the server");
 
             readyStatus = true;
-            while (readyStatus){
+            while (readyStatus) {
                 String clientMessage = input.readUTF();
-                if(clientMessage.equalsIgnoreCase("quit")){
+                if (clientMessage.equalsIgnoreCase("quit")) {
                     server.removeUser(this);
-                    socket.close();;
+                    socket.close();
+                    ;
                     readyStatus = false;
                 }
-                if (clientMessage.equalsIgnoreCase("ready")){
+                if (clientMessage.equalsIgnoreCase("ready")) {
                     readyStatus = false;
                     server.startGame();
                 }
@@ -68,17 +70,45 @@ public class Users extends Thread {
     }
 
     //getter for ready status -> info for Server
-    public boolean isReady(){
+    public boolean isReady() {
         return readyStatus;
     }
 
-    public void sendMessage(String message){
-        try{
+    public String getUserName(){
+        return userName;
+    }
+
+    //setter for estimate
+
+    public void sendMessage(String message) {
+        try {
             output.writeUTF(message);
             output.flush();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public String readString() {
+        String string = "default";
+        try {
+            string = input.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
+
+    public int readInt(){
+        int value =0;
+        try{
+            value = input.readInt();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return value;
+
+    }
 }
+
 
