@@ -14,7 +14,7 @@ public class Session implements Runnable {
     @Override
     public void run() {
         Users player = new Users(server, socket);
-
+        Dice dice = new Dice();
 
         boolean game = true;
         while (game) {
@@ -46,9 +46,7 @@ public class Session implements Runnable {
                         switch (command) {
                             case "print dice":
                                 player.sendMessage("Your dice: ");
-
-
-                                //add print dice() here
+                                dice.printDice();
                                 break;
                             case "increase":
                                 //if statement regarding the increase

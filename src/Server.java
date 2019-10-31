@@ -13,7 +13,7 @@ public class Server {
     private ServerSocket serverSocket;
 
     public Server(int port) {
-        //Set port value to inputted augment, set gameWait to true and create an arraylist of the class "Users"
+        //Set port value to inputted augment, set lobby to true and create an arraylist of the class "Users"
         this.port = port;
         lobby = true;
         users = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Server {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter server port you want the game to be hosted at, default is; 8000. Ports underneath 1024 are reserved and thus unavailable");
         int serverPort = scan.nextInt();
-        if (serverPort <= 1023){
+        if (serverPort <= 1023) {
             System.out.println("Reserved port, input a new value");
             System.out.println("Enter server port you want the game to be hosted at, default is; 8000. Ports underneath 1024 are reserved and thus unavailable");
             serverPort = scan.nextInt();
@@ -57,34 +57,35 @@ public class Server {
         return users;
     }
 
-    public void startGame(){
+    public void startGame() {
         boolean start = true;
-        for (Users u: users) {
-            if(u.isReady() == true){
+        for (Users u : users) {
+            if (u.isReady() == true) {
                 start = false;
             }
         }
-        if(start){
-            lobby=false;
-            for (Users u: users){
+        if (start) {
+            lobby = false;
+            for (Users u : users) {
                 u.sendMessage("Game started");
             }
             new Thread(new Session(this)).start();
         }
     }
 
-    public void removeUser(Users u){
+    public void removeUser(Users u) {
         users.remove(u);
     }
-    public void sendToAll(String message, Users u){
-        for (Users usersThread: users){
-            if (usersThread!=u){
+
+    public void sendToAll(String message, Users u) {
+        for (Users usersThread : users) {
+            if (usersThread != u) {
                 usersThread.sendMessage(message);
             }
         }
     }
 
-    public ServerSocket getServerSocket(){
+    public ServerSocket getServerSocket() {
         return serverSocket;
     }
 }
