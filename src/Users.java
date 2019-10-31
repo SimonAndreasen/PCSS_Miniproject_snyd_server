@@ -35,6 +35,13 @@ public class Users extends Thread {
 
     }
 
+    public void Diceroll(){
+        for (Dice num : myDice) {
+            System.out.println(num);
+        }
+    }
+
+
     public void printDice() {
         System.out.println("Your dice: ");
         myDice.forEach((i) -> System.out.print(i.value + ", "));
