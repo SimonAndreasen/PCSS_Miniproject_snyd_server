@@ -15,24 +15,17 @@ public class Users extends Thread {
     //number of clients
 
     private int clientNo = 0;
-    ArrayList<Dice> myDice = new ArrayList<>();
+
 
 
     //text area for displaying context
     public Users(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        for (int i = 0; i < 3; i++) {
-            myDice.add(new Dice());
-        }
-    }
-
-    public void shuffle() {
-        for (int i = 0; i < myDice.size(); i++) {
-            myDice.get(i).roll();
+        Dice dice = new Dice();
+        dice.createDice();
         }
 
-    }
 
 
     @Override
