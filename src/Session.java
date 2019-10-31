@@ -46,6 +46,7 @@ public class Session implements Runnable {
                         switch (command) {
                             case "print dice":
                                 player.sendMessage("Your dice: ");
+
                                 //add print dice() here
                                 break;
                             case "increase":

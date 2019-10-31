@@ -35,10 +35,17 @@ public class Users extends Thread {
 
     }
 
-    public void Diceroll(){
-        for (Dice num : myDice) {
-            System.out.println(num);
+    public class Dice {
+
+        public int value;
+
+        public Dice(){
+            value = 0;
         }
+        public void roll(){
+            value = (int) (Math.random() * ((6 - 1) + 1)) + 1;
+        }
+
     }
 
 
@@ -63,7 +70,6 @@ public class Users extends Thread {
                 if (clientMessage.equalsIgnoreCase("quit")) {
                     server.removeUser(this);
                     socket.close();
-                    ;
                     readyStatus = false;
                 }
                 if (clientMessage.equalsIgnoreCase("ready")) {
