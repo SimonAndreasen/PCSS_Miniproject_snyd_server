@@ -18,7 +18,7 @@ public class Session implements Runnable {
 
         boolean game = true;
         while (game) {
-
+        System.out.println("game test");
 
             int currentBetAmount = 0;
             int currentBetNumber = 0;
@@ -26,10 +26,11 @@ public class Session implements Runnable {
 
             for (int i = 0; i < server.getUsers().size(); i++) {
                 player = server.getUsers().get(i);
-                if (!player.isLifted()) {
+                if (player.isLifted()) {
                     player.sendBoolean(true);
                     for (Users u : server.getUsers()) {
                         if (u != player) {
+                            System.out.println("user test");
                             u.sendBoolean(false);
                         }
                     }

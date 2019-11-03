@@ -58,16 +58,18 @@ public class Server {
     }
 
     public void startGame() {
+        System.out.println("start");
         boolean start = true;
         for (Users u : users) {
             if (u.isReady() == true) {
                 start = false;
             }
         }
-        if (start) {
+        if (!start) {
             lobby = false;
             for (Users u : users) {
                 u.sendMessage("Game started");
+                System.out.println("game started");
             }
             new Thread(new Session(this)).start();
         }

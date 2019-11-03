@@ -46,8 +46,10 @@ public class Users extends Thread {
                     readyStatus = false;
                 }
                 if (clientMessage.equalsIgnoreCase("ready")) {
-                    readyStatus = false;
+                    System.out.println("test");
                     server.startGame();
+                    readyStatus = false;
+
                 }
 
             }
