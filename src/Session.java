@@ -50,28 +50,27 @@ public class Session implements Runnable {
                                 dice.printDice();
                                 break;
                             case "increase":
-                                boolean correctAmount = false;
-                                boolean correctNumber = false;
                                 //loop for typing amount of dice
+                                boolean correctIncrease = true;
+
                                 do {
                                     player.sendMessage("enter amount");
                                     player.userBetAmount = player.readInt();
-                                    if (player.userBetAmount >= currentBetAmount) {
-                                        currentBetAmount = player.userBetAmount;
-                                        correctAmount = true;
-                                    } else {
-                                        player.sendMessage("Incorrect amount. It needs to be higher or equal than current.");
-                                    }
-                                }while (!correctAmount);
-
-                                do {
                                     player.sendMessage("enter number");
                                     player.userBetNumber = player.readInt();
-                                        if (player.userBetNumber>= currentBetNumber || player.userBetNumber>6 || player.userBetNumber<2){
-                                            currentBetNumber = player.userBetNumber;
-                                            correctNumber=true;
-                                        }
-                                }while (!correctNumber);
+                                    if (player.userBetAmount > currentBetAmount) {
+                                        currentBetAmount = player.userBetAmount;
+                                        currentBetNumber = player.userBetNumber;
+                                        correctIncrease=false;
+                                    }
+                                    if (player.userBetAmount == currentBetAmount && player.userBetNumber > currentBetNumber){
+                                        currentBetAmount = player.userBetAmount;
+                                        currentBetNumber = player.userBetNumber;
+                                        correctIncrease=false;
+                                    }else {
+                                        player.sendMessage("Incorrect increase. Try again");
+                                    }
+                                }while (correctIncrease);
 
                                 server.sendToAll(player.getUserName() + "increased to: " + currentBetAmount + currentBetNumber, player);
                                 nextPlayer = true;
