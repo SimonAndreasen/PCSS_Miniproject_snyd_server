@@ -8,6 +8,8 @@ public class Users extends Thread {
     private Server server;
     private Socket socket;
     private String userName;
+    public int userBetAmount;
+    public int userBetNumber;
     private DataOutputStream output;
     private DataInputStream input;
     private boolean lifted;

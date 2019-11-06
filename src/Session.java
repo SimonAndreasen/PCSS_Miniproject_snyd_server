@@ -50,11 +50,29 @@ public class Session implements Runnable {
                                 dice.printDice();
                                 break;
                             case "increase":
-                                //if statement regarding the increase
-                                player.sendMessage("amount");
-                                currentBetAmount = player.readInt();
-                                player.sendMessage("of a kind");
-                                currentBetNumber = player.readInt();
+                                boolean correctAmount = false;
+                                boolean correctNumber = false;
+                                //loop for typing amount of dice
+                                do {
+                                    player.sendMessage("enter amount");
+                                    player.userBetAmount = player.readInt();
+                                    if (player.userBetAmount >= currentBetAmount) {
+                                        currentBetAmount = player.userBetAmount;
+                                        correctAmount = true;
+                                    } else {
+                                        player.sendMessage("Incorrect amount. It needs to be higher or equal than current.");
+                                    }
+                                }while (!correctAmount);
+
+                                do {
+                                    player.sendMessage("enter number");
+                                    player.userBetNumber = player.readInt();
+                                        if (player.userBetNumber>= currentBetNumber || player.userBetNumber>6 || player.userBetNumber<2){
+                                            currentBetNumber = player.userBetNumber;
+                                            correctNumber=true;
+                                        }
+                                }while (!correctNumber);
+
                                 server.sendToAll(player.getUserName() + "increased to: " + currentBetAmount + currentBetNumber, player);
                                 nextPlayer = true;
                                 break;
