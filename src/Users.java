@@ -17,15 +17,13 @@ public class Users extends Thread {
     //number of clients
 
     private int clientNo = 0;
-
+    ArrayList<Dice> myDice = new ArrayList<>(4); //Create arraylist of type Dice with an capacity of 4 index.
 
 
     //text area for displaying context
     public Users(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        Dice dice = new Dice();
-        dice.createDice();
         }
 
 
@@ -51,7 +49,6 @@ public class Users extends Thread {
                     System.out.println("test");
                     server.startGame();
                     readyStatus = false;
-
                 }
 
             }
@@ -118,4 +115,10 @@ public class Users extends Thread {
 
 }
 
-
+//How to get the dice working and printing the values of it.
+ //for (int i = 0; i < 4; i++) {
+//      myDice.add(new Dice());
+ //       }
+ //       System.out.println("Your dice: ");
+ //       myDice.forEach((i) -> System.out.print(i.value + ", "));
+ //       System.out.println(" ");

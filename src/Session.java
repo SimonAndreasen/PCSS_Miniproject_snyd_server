@@ -13,13 +13,12 @@ public class Session implements Runnable {
 
     @Override
     public void run() {
-        Users player = new Users(server, socket);
+        Users player;
         Dice dice = new Dice();
 
         boolean game = true;
         while (game) {
         System.out.println("game test");
-
             int currentBetAmount = 0;
             int currentBetNumber = 0;
 
