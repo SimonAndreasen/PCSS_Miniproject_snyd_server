@@ -17,7 +17,7 @@ public class Users extends Thread {
     //number of clients
 
     private int clientNo = 0;
-    ArrayList<Dice> myDice = new ArrayList<>(4); //Create arraylist of type Dice with an capacity of 4 index.
+    ArrayList<Dice> myDice = new ArrayList<Dice>(4); //Create arraylist of type Dice with an capacity of 4 index.
 
 
     //text area for displaying context

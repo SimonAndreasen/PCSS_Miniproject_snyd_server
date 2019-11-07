@@ -21,11 +21,11 @@ public class Session implements Runnable {
         System.out.println("game test");
             int currentBetAmount = 0;
             int currentBetNumber = 0;
-
+            boolean resultGame = false;
 
             for (int i = 0; i < server.getUsers().size(); i++) {
                 player = server.getUsers().get(i);
-                if (player.isLifted()) {
+                if (!player.isLifted() && !resultGame) {
                     player.sendBoolean(true);
                     for (Users u : server.getUsers()) {
                         if (u != player) {
@@ -46,7 +46,7 @@ public class Session implements Runnable {
                         switch (command) {
                             case "print dice":
                                 player.sendMessage("Your dice: ");
-                                dice.printDice();
+                                //dice.printDice();
                                 break;
                             case "increase":
                                 //loop for typing amount of dice
@@ -79,6 +79,7 @@ public class Session implements Runnable {
                                 player.setLifted(true);
                                 player.sendMessage("You lifted");
                                 //break the loop here -> proceed to result
+                                resultGame=true;
                                 break;
                             default:
                                 player.sendMessage("Incorrect command");
