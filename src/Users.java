@@ -115,6 +115,9 @@ public class Users extends Thread {
             e.printStackTrace();
         }
     }
+    public ArrayList<Dice> getMyDice(){
+        return this.myDice;
+    }
 
 }
 

@@ -5,6 +5,7 @@ public class Session implements Runnable {
 
     private Server server;
     private Socket socket;
+    private int diceCount = 0;
 
     public Session(Server server) {
         this.server = server;
@@ -13,12 +14,12 @@ public class Session implements Runnable {
 
     @Override
     public void run() {
-        Users player;
-        Dice dice = new Dice();
+        Users player = new Users(server,socket);
 
         boolean game = true;
         while (game) {
         System.out.println("game test");
+
             int currentBetAmount = 0;
             int currentBetNumber = 0;
             boolean resultGame = false;
@@ -30,6 +31,7 @@ public class Session implements Runnable {
                     for (Users u : server.getUsers()) {
                         if (u != player) {
                             System.out.println("user test");
+                            System.out.println(player.getMyDice());
                             u.sendBoolean(false);
                         }
                     }
@@ -77,7 +79,21 @@ public class Session implements Runnable {
                                 server.sendToAll(player.getUserName() + "lifted", player);
                                 player.setLifted(true);
                                 player.sendMessage("You lifted");
-                                //break the loop here -> proceed to result
+                                for (int u = 0; u<server.getUsers().size(); u++){
+                                    for (int d =0; d<player.myDice.size(); d++){
+                                        if(player.myDice.get(d).value == currentBetNumber){
+                                        diceCount++;
+                                        }
+                                    }
+                                }
+                                if (diceCount>=currentBetAmount){
+                                    player.sendMessage("You lost! There were " + diceCount + " of " + currentBetNumber + ".");
+                                    server.sendToAll(player.getUserName() + "lost! There were " + diceCount + " of" + currentBetNumber,player);
+                                }else{
+                                    player.sendMessage("You won! There were only " + diceCount+ " of " + currentBetNumber + ".");
+                                    server.sendToAll(player.getUserName() + "was right! There were " + diceCount + " of " + currentBetNumber,player);
+                                }
+                                //break the loop here ->
                                 resultGame=true;
                                 break;
                             default:
@@ -98,15 +114,6 @@ public class Session implements Runnable {
             }
 
             //result game
-            for (int i = 0; i < server.getUsers().size(); i++) {
-                for (int j = 0; j<player.myDice.size(); j++) {
-                    if (currentBetNumber == myDice.get(j).value){
-
-                    }
-                }
-
-
-            }
             //HERE
 
             //continue or quit
