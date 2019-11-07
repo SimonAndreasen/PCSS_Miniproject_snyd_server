@@ -46,7 +46,6 @@ public class Session implements Runnable {
                         switch (command) {
                             case "print dice":
                                 player.sendMessage("Your dice: ");
-                                //dice.printDice();
                                 break;
                             case "increase":
                                 //loop for typing amount of dice
@@ -99,6 +98,15 @@ public class Session implements Runnable {
             }
 
             //result game
+            for (int i = 0; i < server.getUsers().size(); i++) {
+                for (int j = 0; j<player.myDice.size(); j++) {
+                    if (currentBetNumber == myDice.get(j).value){
+
+                    }
+                }
+
+
+            }
             //HERE
 
             //continue or quit
