@@ -24,6 +24,9 @@ public class Users extends Thread {
     public Users(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
+        for (int i = 0; i<4;i++){
+            myDice.add(new Dice());
+        }
         }
 
 
