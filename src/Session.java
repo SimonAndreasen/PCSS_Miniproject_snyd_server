@@ -3,12 +3,15 @@ import java.net.Socket;
 
 public class Session implements Runnable {
 
-    private Server server;
-    private Socket socket;
+    private Socket player1;
+    private Socket player2;
+    private Socket player3;
     private int diceCount = 0;
 
-    public Session(Server server) {
-        this.server = server;
+    public Session(Socket player1, Socket player2, Socket player3) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.player3 = player3;
     }
 
 
