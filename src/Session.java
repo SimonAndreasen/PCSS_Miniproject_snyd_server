@@ -1,3 +1,5 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -14,8 +16,23 @@ public class Session implements Runnable {
         this.player3 = player3;
     }
 
+    public void run(){
+        try{
+            DataInputStream inputClient1 = new DataInputStream(player1.getInputStream());
+            DataInputStream inputClient2 = new DataInputStream(player2.getInputStream());
+            DataInputStream inputClient3 = new DataInputStream(player3.getInputStream());
 
-    @Override
+            DataOutputStream outputClient1 = new DataOutputStream(player1.getOutputStream());
+            DataOutputStream outputClinet2 = new DataOutputStream(player2.getOutputStream());
+            DataOutputStream outputClient3 = new DataOutputStream(player3.getOutputStream());
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+   /* @Override
     public void run() {
         Users player = new Users(server,socket);
 
@@ -149,4 +166,7 @@ public class Session implements Runnable {
             e.printStackTrace();
         }
     }
+}
+   */
+
 }
