@@ -1,14 +1,23 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.io.DataOutputStream.*;
+import java.util.ArrayList;
 
 public class Session implements Runnable {
-
+    boolean connect = true;
+    boolean game;
     private Socket player1;
     private Socket player2;
     private Socket player3;
     private int diceCount = 0;
+    private int turnOrder = 1;
+    private int betAmount;
+    private int betNumber;
+    private boolean correctIncrease;
 
     public Session(Socket player1, Socket player2, Socket player3) {
         this.player1 = player1;
@@ -16,22 +25,255 @@ public class Session implements Runnable {
         this.player3 = player3;
     }
 
-    public void run(){
-        try{
+
+    int currentBetAmount = 0;
+    int currentBetNumber = 0;
+    boolean resultGame = false;
+
+    public void run() {
+        try {
             DataInputStream inputClient1 = new DataInputStream(player1.getInputStream());
             DataInputStream inputClient2 = new DataInputStream(player2.getInputStream());
             DataInputStream inputClient3 = new DataInputStream(player3.getInputStream());
 
             DataOutputStream outputClient1 = new DataOutputStream(player1.getOutputStream());
-            DataOutputStream outputClinet2 = new DataOutputStream(player2.getOutputStream());
+            DataOutputStream outputClient2 = new DataOutputStream(player2.getOutputStream());
             DataOutputStream outputClient3 = new DataOutputStream(player3.getOutputStream());
+            while (connect) {
 
-        }catch (IOException e){
+                outputClient1.writeDouble(1);
+                outputClient2.writeDouble(2);
+                outputClient3.writeDouble(3);
+
+                game = true;
+                connect = false;
+            }
+            do {
+                System.out.println("we enter game");
+//////////////////////////////PLAYER 1 ///////////////////////////
+                if (turnOrder == 1) {
+                    //player 1 is making actions
+                    System.out.println("we enter player1");
+                    outputClient1.writeUTF("It is your turn");
+                    outputClient2.writeUTF("It is players 1 turn");
+                    outputClient3.writeUTF("It is players 1 turn");
+
+                    outputClient1.writeBoolean(true);
+                    outputClient2.writeBoolean(false);
+                    outputClient3.writeBoolean(false);
+
+                    boolean correctAction = false;
+                    do {
+                        System.out.println("we enter do loop in p1");
+                        String actionP1 = inputClient1.readUTF();
+                        System.out.println("we receive message from p1");
+                        switch (actionP1) {
+                            case "print dice":
+                                System.out.println("case print dice");
+                                //print dice function here
+                                break;
+                            case "increase":
+                                correctIncrease = true;
+                                System.out.println("case increase");
+                                /*do {
+                                    outputClient1.writeUTF("Enter amount");
+                                    betAmount = inputClient1.readInt();
+                                    outputClient1.writeUTF("Enter number");
+                                    betNumber = inputClient1.readInt();
+                                    if (betAmount > currentBetAmount) {
+                                        currentBetAmount = betAmount;
+                                        currentBetNumber = betNumber;
+                                        outputClient1.writeUTF("correct increase");
+                                        outputClient1.writeBoolean(false);
+                                        correctIncrease = false;
+
+                                    }
+                                    if (betAmount == currentBetAmount && betNumber > currentBetNumber) {
+                                        currentBetAmount = betAmount;
+                                        currentBetNumber = betNumber;
+                                        outputClient1.writeUTF("correct increase");
+                                        outputClient1.writeBoolean(false);
+                                        correctIncrease = false;
+                                    } else {
+                                        outputClient1.writeUTF("Incorrect increase. Try again");
+                                        outputClient1.writeBoolean(true);
+                                    }
+                                } while (correctIncrease);
+                                */
+                                correctAction = true;
+                                break;
+                            case "lift":
+                                System.out.println("case lift");
+                                game = false;
+                                correctAction = true;
+                                break;
+                        }
+                    } while (!correctAction);
+                    turnOrder = 2;
+                }
+
+///////////////////////PLAYER 2 ////////////////////////////////////
+                if (turnOrder == 2) {
+                    System.out.println("player 2 turn");
+                    //player 2 is making actions
+                    outputClient1.writeUTF("It is players 2 turn");
+                    outputClient2.writeUTF("It is your turn");
+                    outputClient3.writeUTF("It is players 2 turn");
+
+                    outputClient1.writeBoolean(false);
+                    outputClient2.writeBoolean(true);
+                    outputClient3.writeBoolean(false);
+
+                    boolean correctAction = false;
+                    do {
+                        System.out.println("we enter do loop in p2");
+                        String actionP2 = inputClient2.readUTF();
+                        System.out.println("we recieve a command in p2");
+                        switch (actionP2) {
+                            case "print dice":
+                                System.out.println("case print dice");
+                                //print dice function here
+                                break;
+                            case "increase":
+                                correctIncrease = true;
+                                System.out.println("case increase");
+                                correctAction = true;
+                                break;
+                            case "lift":
+                                System.out.println("case lift");
+                                game = false;
+                                correctAction = true;
+                                break;
+                        }
+                    } while (!correctAction);
+                    turnOrder=3;
+                }
+
+////////////////////////PLAYER 3 ///////////////////////////////////////
+                if (turnOrder == 3){
+                    System.out.println("player 3 turn");
+                    //player 3 is making actions
+                    outputClient1.writeUTF("It is players 3 turn");
+                    outputClient2.writeUTF("It is players 3 turn");
+                    outputClient3.writeUTF("It is your turn");
+
+                    outputClient1.writeBoolean(false);
+                    outputClient2.writeBoolean(false);
+                    outputClient3.writeBoolean(true);
+                    boolean correctAction = false;
+                    do {
+                        System.out.println("we enter do loop in p3");
+                        String actionP3 = inputClient3.readUTF();
+                        System.out.println("we recieve a command in p2");
+                        switch (actionP3) {
+                            case "print dice":
+                                System.out.println("case print dice");
+                                //print dice function here
+                                break;
+                            case "increase":
+                                correctIncrease = true;
+                                System.out.println("case increase");
+                                correctAction = true;
+                                break;
+                            case "lift":
+                                System.out.println("case lift");
+                                game = false;
+                                correctAction = true;
+                                break;
+                        }
+                    } while (!correctAction);
+                }
+                turnOrder=1;
+            }while (game);
+            System.out.println("out of game loop");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+}
 
+            /*while (game) {
+                for (int i = 0; i < getplayer.size(); i++) {
+                    player = server.getUsers().get(i);
+                    if (!player.isLifted() && !resultGame) {
+                        player.sendBoolean(true);
+                        for (Users u : server.getUsers()) {
+                            if (u != player) {
+                                System.out.println("user test");
+                                System.out.println(player.getMyDice());
+                                u.sendBoolean(false);
+                            }
+                        }
+                        String turnMessage = "It is " + player.getUserName() + " turn.";
+                        server.sendToAll(turnMessage, player);
+                        String messageToYou = "It is your turn. Current estimate is: " + currentBetAmount + " of " + currentBetNumber + "." + '\n'
+                                + "You can use commands: print dice, increase, lift";
+                        player.sendMessage(messageToYou);
 
+                        boolean nextPlayer = false;
+
+                        do {
+                            String command = player.readString();
+                            switch (command) {
+                                case "print dice":
+                                    player.sendMessage("Your dice: ");
+                                    break;
+                                case "increase":
+                                    //loop for typing amount of dice
+                                    boolean correctIncrease = true;
+
+                                    do {
+                                        player.sendMessage("enter amount");
+                                        player.userBetAmount = player.readInt();
+                                        player.sendMessage("enter number");
+                                        player.userBetNumber = player.readInt();
+                                        if (player.userBetAmount > currentBetAmount) {
+                                            currentBetAmount = player.userBetAmount;
+                                            currentBetNumber = player.userBetNumber;
+                                            correctIncrease = false;
+                                        }
+                                        if (player.userBetAmount == currentBetAmount && player.userBetNumber > currentBetNumber) {
+                                            currentBetAmount = player.userBetAmount;
+                                            currentBetNumber = player.userBetNumber;
+                                            correctIncrease = false;
+                                        } else {
+                                            player.sendMessage("Incorrect increase. Try again");
+                                        }
+                                    } while (correctIncrease);
+
+                                    server.sendToAll(player.getUserName() + "increased to: " + currentBetAmount + currentBetNumber, player);
+                                    nextPlayer = true;
+                                    break;
+                                case "lift":
+                                    server.sendToAll(player.getUserName() + "lifted", player);
+                                    player.setLifted(true);
+                                    player.sendMessage("You lifted");
+                                    for (int u = 0; u < server.getUsers().size(); u++) {
+                                        for (int d = 0; d < player.myDice.size(); d++) {
+                                            if (player.myDice.get(d).value == currentBetNumber) {
+                                                diceCount++;
+                                            }
+                                        }
+                                    }
+                                    if (diceCount >= currentBetAmount) {
+                                        player.sendMessage("You lost! There were " + diceCount + " of " + currentBetNumber + ".");
+                                        server.sendToAll(player.getUserName() + "lost! There were " + diceCount + " of" + currentBetNumber, player);
+                                    } else {
+                                        player.sendMessage("You won! There were only " + diceCount + " of " + currentBetNumber + ".");
+                                        server.sendToAll(player.getUserName() + "was right! There were " + diceCount + " of " + currentBetNumber, player);
+                                    }
+                            }
+                        } while (nextPlayer);
+                    } else {
+
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+*/
    /* @Override
     public void run() {
         Users player = new Users(server,socket);
@@ -169,4 +411,3 @@ public class Session implements Runnable {
 }
    */
 
-}

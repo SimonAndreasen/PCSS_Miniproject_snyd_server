@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Users extends Thread {
+/*public class Users extends Thread {
     private Server server;
     private Socket socket;
     private String userName;
@@ -128,3 +128,4 @@ public class Users extends Thread {
  //       System.out.println("Your dice: ");
  //       myDice.forEach((i) -> System.out.print(i.value + ", "));
  //       System.out.println(" ");
+*/

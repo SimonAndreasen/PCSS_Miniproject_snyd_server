@@ -11,7 +11,7 @@ public class Server{
             //used to show how many clients that are playing
             int clientNo = 0;
             //the port used to connect to the server, the number could be between 1025 - 65536
-            int port = 7500;
+            int port = 8000;
 
             try {
                 //Creates a socket to connect to the client, through the port
@@ -30,7 +30,7 @@ public class Server{
                     System.out.println("host name " + inetAddress1.getHostName());
                     System.out.println("IP address " + inetAddress1.getHostAddress());
 
-                    //Accept the second player
+                   //Accept the second player
                     Socket player2 = serverSocket.accept();
                     clientNo++;
                     System.out.println("Client 2 connected");
@@ -42,6 +42,7 @@ public class Server{
 
                     //Accept the third player
                     Socket player3 = serverSocket.accept();
+                    clientNo++;
                     System.out.println("Client 3 connected");
 
                     InetAddress inetAddress3 = player3.getInetAddress();
@@ -50,7 +51,7 @@ public class Server{
                     System.out.println("IP address " + inetAddress3.getHostAddress());
 
                     //creates a thread of HandleASession when two players are available
-                    new Thread(new Session(player1, player2, player3)).start();
+                    new Thread(new Session(player1,player2,player3)).start();
                     System.out.println("Thread created");
 
                 }
