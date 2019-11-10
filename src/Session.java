@@ -52,11 +52,11 @@ public class Session implements Runnable {
             }
 
             while (connect) {
-
+                //sending turn order to users
                 outputClient1.writeDouble(1);
                 outputClient2.writeDouble(2);
                 outputClient3.writeDouble(3);
-
+                //sending dice values to users
                 for (int i = 0; i < 4; i++){
                     outputClient1.writeInt(diceP1.get(i).value);
                     outputClient2.writeInt(diceP2.get(i).value);
@@ -68,8 +68,6 @@ public class Session implements Runnable {
             while (turnOrder != 0){
                 System.out.println("we enter game");
 
-
-
 //////////////////////////////PLAYER 1 ///////////////////////////
                 if (turnOrder == 1) {
                     //player 1 is making actions
@@ -79,7 +77,7 @@ public class Session implements Runnable {
                     outputClient1.writeUTF("Player 1 turn");
                     outputClient2.writeUTF("Player 1 turn");
                     outputClient3.writeUTF("Player 1 turn");
-
+                    //sending who's turn it is
                     outputClient1.writeDouble(1);
                     outputClient2.writeDouble(0);
                     outputClient3.writeDouble(0);
@@ -88,9 +86,9 @@ public class Session implements Runnable {
 
                     boolean correctAction = false;
                     do {
-                        System.out.println("we enter do loop in p1");
+                        System.out.println("enter do loop in p1");
                         String actionP1 = inputClient1.readUTF();
-                        System.out.println("we receive message from p1");
+                        System.out.println("receive message from p1");
                         switch (actionP1) {
 
                             case "increase":
@@ -113,7 +111,7 @@ public class Session implements Runnable {
                                     if (betAmount == currentBetAmount && betNumber > currentBetNumber && betNumber <=6) {
                                         currentBetAmount = betAmount;
                                         currentBetNumber = betNumber;
-                                        outputClient1.writeUTF("correct increase");
+                                        outputClient1.writeUTF("valid increase");
                                         outputClient1.writeBoolean(false);
                                         correctIncrease = true;
                                     }
@@ -185,7 +183,7 @@ public class Session implements Runnable {
                                     if (betAmount == currentBetAmount && betNumber > currentBetNumber && betNumber <=6){
                                         currentBetAmount = betAmount;
                                         currentBetNumber = betNumber;
-                                        outputClient2.writeUTF("correct increase");
+                                        outputClient2.writeUTF("valid increase");
                                         outputClient2.writeBoolean(false);
                                         correctIncrease = true;
                                     }
@@ -223,7 +221,7 @@ public class Session implements Runnable {
                     outputClient1.writeUTF("Player 3 turn");
                     outputClient2.writeUTF("Player 3 turn");
                     outputClient3.writeUTF("Player 3 turn");
-
+                    //sending who's turn it is
                     outputClient1.writeDouble(0);
                     outputClient2.writeDouble(0);
                     outputClient3.writeDouble(1);
@@ -231,9 +229,9 @@ public class Session implements Runnable {
 
                     boolean correctAction = false;
                     do {
-                        System.out.println("we enter do loop in p3");
+                        System.out.println("enter do loop in p3");
                         String actionP3 = inputClient3.readUTF();
-                        System.out.println("we receive a command in p2");
+                        System.out.println("receive a command in p2");
                         switch (actionP3) {
 
                             case "increase":
@@ -256,7 +254,7 @@ public class Session implements Runnable {
                                 if (betAmount == currentBetAmount && betNumber > currentBetNumber && betNumber <=6) {
                                     currentBetAmount = betAmount;
                                     currentBetNumber = betNumber;
-                                    outputClient3.writeUTF("correct increase");
+                                    outputClient3.writeUTF("valid increase");
                                     outputClient3.writeBoolean(false);
                                     correctIncrease = true;
                                 }
@@ -289,7 +287,7 @@ public class Session implements Runnable {
                 }
 
             }
-            System.out.println("out of game loop");
+            System.out.println("Game ended");
 
             //sent booleans here:
 ////////////////////////GAME RESULT ///////////////////////////////////////
@@ -306,7 +304,7 @@ public class Session implements Runnable {
                 }
             }
             System.out.println("There were " + diceCount + " of " + currentBetNumber);
-
+            //determining winner
             if (diceCount>= currentBetAmount){
                 winner = whoLifted + " loose. There were " + diceCount + " of " + currentBetNumber;
             }else {
@@ -316,7 +314,7 @@ public class Session implements Runnable {
             outputClient1.writeUTF(winner);
             outputClient2.writeUTF(winner);
             outputClient3.writeUTF(winner);
-
+            //create new session
             new Thread(new  Session(player1,player2,player3)).start();
 
 
