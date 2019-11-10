@@ -1,3 +1,3 @@
 This repository contians the server applications for the PCSS mini project. (For the client side please go here; https://github.com/danmazan/PCSS_Miniproject_snyd_client) In this repositiry, one can find all things related to it. Sch as the source code. Additional info about scrum and a class diagram can be found underneath the "Wiki".
 
-To run the application; Open it up in ones preffered IDE, locate the "Server.java" build and run the application. Look in the consoel for relevant info during the game.
+To run the application; First download the server as zip from Github. Unzip it in ones desired location. Next download Intellij (https://www.jetbrains.com/idea/nextversion/), Click open project, locate the directionary for where you placed your unzipped folder. locate the "Server.java" build and run the application and the server will start automatically. Look in the console for relevant info during the game.
