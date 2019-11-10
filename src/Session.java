@@ -15,6 +15,7 @@ public class Session implements Runnable {
     private int diceCount = 0;
     private int turnOrder = 1;
     private String whoLifted;
+    private String winner;
     private int betAmount;
     private int betNumber;
     private boolean correctIncrease;
@@ -55,21 +56,27 @@ public class Session implements Runnable {
                 outputClient2.writeDouble(2);
                 outputClient3.writeDouble(3);
 
-                connect = false;
-            }
-            while (turnOrder != 0){
-                System.out.println("we enter game");
                 for (int i = 0; i < 4; i++){
                     outputClient1.writeInt(diceP1.get(i).value);
                     outputClient2.writeInt(diceP2.get(i).value);
                     outputClient3.writeInt(diceP3.get(i).value);
                 }
 
+                connect = false;
+            }
+            while (turnOrder != 0){
+                System.out.println("we enter game");
+
+
 
 //////////////////////////////PLAYER 1 ///////////////////////////
                 if (turnOrder == 1) {
                     //player 1 is making actions
                     System.out.println("we enter player1");
+
+                    outputClient1.writeUTF("Player 1 turn");
+                    outputClient2.writeUTF("Player 1 turn");
+                    outputClient3.writeUTF("Player 1 turn");
 
                     outputClient1.writeBoolean(true);
                     outputClient2.writeBoolean(false);
@@ -131,6 +138,9 @@ public class Session implements Runnable {
                 if (turnOrder == 2) {
                     System.out.println("player 2 turn");
                     //player 2 is making actions
+                    outputClient1.writeUTF("Player 2 turn");
+                    outputClient2.writeUTF("Player 2 turn");
+                    outputClient3.writeUTF("Player 2 turn");
 
                     outputClient1.writeBoolean(false);
                     outputClient2.writeBoolean(true);
@@ -187,6 +197,10 @@ public class Session implements Runnable {
                     System.out.println("player 3 turn");
                     //player 3 is making actions
 
+                    outputClient1.writeUTF("Player 3 turn");
+                    outputClient2.writeUTF("Player 3 turn");
+                    outputClient3.writeUTF("Player 3 turn");
+
                     outputClient1.writeBoolean(false);
                     outputClient2.writeBoolean(false);
                     outputClient3.writeBoolean(true);
@@ -233,6 +247,8 @@ public class Session implements Runnable {
                                 correctAction = true;
                                 turnOrder = 0;
                                 break;
+                        //    default:
+
                         }
                     } while (!correctAction);
                 }
@@ -242,6 +258,24 @@ public class Session implements Runnable {
             outputClient2.writeUTF(whoLifted + " lifted");
             outputClient3.writeUTF(whoLifted + " lifted");
             //lift resulted here:
+            for (int i = 0; i<4; i++){
+                if(diceP1.get(i).value == currentBetNumber){
+                    diceCount ++;
+                }
+                if (diceP2.get(i).value == currentBetNumber){
+                    diceCount++;
+                }
+                if (diceP3.get(i).value == currentBetNumber){
+                    diceCount++;
+                }
+            }
+            System.out.println("There were " + diceCount + " of " + currentBetNumber);
+
+            if (diceCount>= currentBetAmount){
+                winner = whoLifted + " loose. There were " + diceCount + " of " + currentBetNumber;
+            }else {
+                winner = whoLifted + " won. There were " + diceCount + " of " + currentBetNumber;
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
