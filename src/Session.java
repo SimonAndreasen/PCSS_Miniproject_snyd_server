@@ -1,10 +1,7 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.io.DataOutputStream.*;
 import java.util.ArrayList;
 
 public class Session implements Runnable {
@@ -21,18 +18,18 @@ public class Session implements Runnable {
     private boolean correctIncrease;
     private int yourTurn = 0;
 
-    public Session(Socket player1, Socket player2, Socket player3) {
+    Session(Socket player1, Socket player2, Socket player3) {
         this.player1 = player1;
         this.player2 = player2;
         this.player3 = player3;
     }
 
-    ArrayList<Dice> diceP1 = new ArrayList<>();
-    ArrayList<Dice> diceP2 = new ArrayList<>();
-    ArrayList<Dice> diceP3 = new ArrayList<>();
+    private ArrayList<Dice> diceP1 = new ArrayList<>();
+    private ArrayList<Dice> diceP2 = new ArrayList<>();
+    private ArrayList<Dice> diceP3 = new ArrayList<>();
 
-    int currentBetAmount = 0;
-    int currentBetNumber = 0;
+    private int currentBetAmount = 0;
+    private int currentBetNumber = 0;
     boolean resultGame = false;
 
     public void run() {
